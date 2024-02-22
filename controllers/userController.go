@@ -60,7 +60,7 @@ func Login(c *gin.Context) {
 	var user models.User
 	initializers.DB.First(&user, "email = ?", body.Email)
 	if user.ID == 0 {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials e"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
@@ -68,7 +68,7 @@ func Login(c *gin.Context) {
 	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials p"})
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
 		return
 	}
 
@@ -85,6 +85,15 @@ func Login(c *gin.Context) {
 	}
 
 	// send the token
-	c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	// c.JSON(http.StatusOK, gin.H{"token": tokenString})
+	// send the cookie
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorisation", tokenString, 3600*24*30, "", "", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "User logged in successfully"})
+}
 
+func Validate(c *gin.Context) {
+	user, _ := c.Get("user")
+
+	c.JSON(http.StatusOK, gin.H{"message": user})
 }

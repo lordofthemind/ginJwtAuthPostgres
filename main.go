@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/lordofthemind/ginJwtAuthPostgres/controllers"
 	"github.com/lordofthemind/ginJwtAuthPostgres/initializers"
+	"github.com/lordofthemind/ginJwtAuthPostgres/middleware"
 )
 
 func init() {
@@ -25,6 +26,7 @@ func main() {
 	router := gin.Default()
 	router.POST("/signup", controllers.Signup)
 	router.POST("/login", controllers.Login)
+	router.GET("/validate", middleware.RequireAuth, controllers.Validate)
 
 	err := router.Run("localhost:9090")
 	if err != nil {
