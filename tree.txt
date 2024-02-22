@@ -1,0 +1,17 @@
+.
+├── controllers
+│   └── userController.go
+├── go.mod
+├── go.sum
+├── initializers
+│   ├── connectToDB.go
+│   ├── loadEnvVariables.go
+│   └── syncDatabase.go
+├── main.go
+├── middleware
+│   └── requireAuth.go
+├── models
+│   └── userModels.go
+└── tree.txt
+
+4 directories, 10 files
